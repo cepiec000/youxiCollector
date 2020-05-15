@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.collector.mapper.GameInfoMapper">
+    
+    <resultMap type="com.seven.collector.bean.GameInfoDO" id="GameInfoResult">
+        <result property="id"    column="id"    />
+        <result property="gameId"    column="gameId"    />
+        <result property="title"    column="title"    />
+        <result property="icon"    column="icon"    />
+        <result property="type"    column="type"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="downNum"    column="down_num"    />
+        <result property="likeNum"    column="like_num"    />
+        <result property="viewNum"    column="view_num"    />
+        <result property="score"    column="score"    />
+        <result property="starLevel"    column="start_level"    />
+        <result property="androidFileSize"    column="android_file_size"    />
+        <result property="androidDownUrl"    column="android_down_url"    />
+        <result property="iosFileSize"    column="ios_file_size"    />
+        <result property="iosDownUrl"    column="ios_down_url"    />
+        <result property="content"    column="content"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteFlag"    column="delete_flag"    />
+    </resultMap>
+	
+	<sql id="GameInfo_select_sql">
+        select id, gameId, title, icon, type, type_id, down_num, like_num, view_num, score, star_level, android_file_size, android_down_url, ios_file_size, ios_down_url, content, create_time, update_time, delete_flag from game_info
+    </sql>
+	
+    <select id="selectGameInfoList" parameterType="com.seven.collector.bean.GameInfoDO" resultMap="GameInfoResult">
+        <include refid="GameInfo_select_sql"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="gameId != null "> and gameId = #{gameId}</if>
+             <if test="title != null  and title != '' "> and title = #{title}</if>
+             <if test="icon != null  and icon != '' "> and icon = #{icon}</if>
+             <if test="type != null  and type != '' "> and type = #{type}</if>
+             <if test="typeId != null "> and type_id = #{typeId}</if>
+             <if test="downNum != null "> and down_num = #{downNum}</if>
+             <if test="likeNum != null "> and like_num = #{likeNum}</if>
+             <if test="viewNum != null "> and view_num = #{viewNum}</if>
+             <if test="score != null "> and score = #{score}</if>
+             <if test="starLevel != null "> and star_level = #{starLevel}</if>
+             <if test="androidFileSize != null  and androidFileSize != '' "> and android_file_size = #{androidFileSize}</if>
+             <if test="androidDownUrl != null  and androidDownUrl != '' "> and android_down_url = #{androidDownUrl}</if>
+             <if test="iosFileSize != null  and iosFileSize != '' "> and ios_file_size = #{iosFileSize}</if>
+             <if test="iosDownUrl != null  and iosDownUrl != '' "> and ios_down_url = #{iosDownUrl}</if>
+             <if test="content != null  and content != '' "> and content = #{content}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="deleteFlag != null "> and delete_flag = #{deleteFlag}</if>
+         </where>
+    </select>
+    
+    <select id="selectGameInfoById" parameterType="Long" resultMap="GameInfoResult">
+        <include refid="GameInfo_select_sql"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGameInfo" parameterType="com.seven.collector.bean.GameInfoDO" useGeneratedKeys="true" keyProperty="id">
+        insert into game_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="gameId != null  ">gameId,</if>
+			<if test="title != null  and title != ''  ">title,</if>
+			<if test="icon != null  and icon != ''  ">icon,</if>
+			<if test="type != null  and type != ''  ">type,</if>
+			<if test="typeId != null  ">type_id,</if>
+			<if test="downNum != null  ">down_num,</if>
+			<if test="likeNum != null  ">like_num,</if>
+			<if test="viewNum != null  ">view_num,</if>
+			<if test="score != null  ">score,</if>
+			<if test="starLevel != null  ">star_level,</if>
+			<if test="androidFileSize != null  and androidFileSize != ''  ">android_file_size,</if>
+			<if test="androidDownUrl != null  and androidDownUrl != ''  ">android_down_url,</if>
+			<if test="iosFileSize != null  and iosFileSize != ''  ">ios_file_size,</if>
+			<if test="iosDownUrl != null  and iosDownUrl != ''  ">ios_down_url,</if>
+			<if test="content != null  and content != ''  ">content,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="deleteFlag != null  ">delete_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="gameId != null  ">#{gameId},</if>
+			<if test="title != null  and title != ''  ">#{title},</if>
+			<if test="icon != null  and icon != ''  ">#{icon},</if>
+			<if test="type != null  and type != ''  ">#{type},</if>
+			<if test="typeId != null  ">#{typeId},</if>
+			<if test="downNum != null  ">#{downNum},</if>
+			<if test="likeNum != null  ">#{likeNum},</if>
+			<if test="viewNum != null  ">#{viewNum},</if>
+			<if test="score != null  ">#{score},</if>
+			<if test="starLevel != null  ">#{starLevel},</if>
+			<if test="androidFileSize != null  and androidFileSize != ''  ">#{androidFileSize},</if>
+			<if test="androidDownUrl != null  and androidDownUrl != ''  ">#{androidDownUrl},</if>
+			<if test="iosFileSize != null  and iosFileSize != ''  ">#{iosFileSize},</if>
+			<if test="iosDownUrl != null  and iosDownUrl != ''  ">#{iosDownUrl},</if>
+			<if test="content != null  and content != ''  ">#{content},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="deleteFlag != null  ">#{deleteFlag},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateGameInfo" parameterType="com.seven.collector.bean.GameInfoDO">
+        update game_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gameId != null  ">gameId = #{gameId},</if>
+            <if test="title != null  and title != ''  ">title = #{title},</if>
+            <if test="icon != null  and icon != ''  ">icon = #{icon},</if>
+            <if test="type != null  and type != ''  ">type = #{type},</if>
+            <if test="typeId != null  ">type_id = #{typeId},</if>
+            <if test="downNum != null  ">down_num = #{downNum},</if>
+            <if test="likeNum != null  ">like_num = #{likeNum},</if>
+            <if test="viewNum != null  ">view_num = #{viewNum},</if>
+            <if test="score != null  ">score = #{score},</if>
+            <if test="starLevel != null  ">star_level = #{starLevel},</if>
+            <if test="androidFileSize != null  and androidFileSize != ''  ">android_file_size = #{androidFileSize},</if>
+            <if test="androidDownUrl != null  and androidDownUrl != ''  ">android_down_url = #{androidDownUrl},</if>
+            <if test="iosFileSize != null  and iosFileSize != ''  ">ios_file_size = #{iosFileSize},</if>
+            <if test="iosDownUrl != null  and iosDownUrl != ''  ">ios_down_url = #{iosDownUrl},</if>
+            <if test="content != null  and content != ''  ">content = #{content},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="deleteFlag != null  ">delete_flag = #{deleteFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteGameInfoById" parameterType="Long">
+        delete from game_info where id = #{id}
+    </delete>
+	
+    <delete id="deleteGameInfoByIds" parameterType="String">
+        delete from game_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
