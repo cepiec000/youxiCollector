@@ -6,22 +6,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="com.seven.collector.bean.GameImageDO" id="GameImageResult">
         <result property="id"    column="id"    />
-        <result property="gameId"    column="game_id"    />
+        <result property="targetId"    column="target_id"    />
         <result property="url"    column="url"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="deleteFlag"    column="delete_flag"    />
+        <result property="type"    column="type"    />
     </resultMap>
 	
 	<sql id="GameImage_select_sql">
-        select id, game_id, url, create_time, update_time, delete_flag from game_image
+        select id, target_id, url, create_time, update_time, delete_flag,`type` from game_image
     </sql>
 	
     <select id="selectGameImageList" parameterType="com.seven.collector.bean.GameImageDO" resultMap="GameImageResult">
         <include refid="GameImage_select_sql"/>
         <where>  
             <if test="id != null "> and id = #{id}</if>
-             <if test="gameId != null "> and game_id = #{gameId}</if>
+             <if test="targetId != null "> and target_id = #{targetId}</if>
              <if test="url != null  and url != '' "> and url = #{url}</if>
              <if test="createTime != null "> and create_time = #{createTime}</if>
              <if test="updateTime != null "> and update_time = #{updateTime}</if>
@@ -38,30 +39,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into game_image
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null  ">id,</if>
-			<if test="gameId != null  ">game_id,</if>
+			<if test="targetId != null  ">target_id,</if>
 			<if test="url != null  and url != ''  ">url,</if>
 			<if test="createTime != null  ">create_time,</if>
 			<if test="updateTime != null  ">update_time,</if>
 			<if test="deleteFlag != null  ">delete_flag,</if>
+            <if test="type != null  ">`type`,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null  ">#{id},</if>
-			<if test="gameId != null  ">#{gameId},</if>
+			<if test="targetId != null  ">#{targetId},</if>
 			<if test="url != null  and url != ''  ">#{url},</if>
 			<if test="createTime != null  ">#{createTime},</if>
 			<if test="updateTime != null  ">#{updateTime},</if>
 			<if test="deleteFlag != null  ">#{deleteFlag},</if>
+            <if test="type != null  ">#{type},</if>
          </trim>
     </insert>
 	 
     <update id="updateGameImage" parameterType="com.seven.collector.bean.GameImageDO">
         update game_image
         <trim prefix="SET" suffixOverrides=",">
-            <if test="gameId != null  ">game_id = #{gameId},</if>
+            <if test="targetId != null  ">target_id = #{targetId},</if>
             <if test="url != null  and url != ''  ">url = #{url},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="updateTime != null  ">update_time = #{updateTime},</if>
             <if test="deleteFlag != null  ">delete_flag = #{deleteFlag},</if>
+            <if test="type != null  ">`type` = #{type},</if>
         </trim>
         where id = #{id}
     </update>

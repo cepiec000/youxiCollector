@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.collector.mapper.GameNewsMapper">
+    
+    <resultMap type="com.seven.collector.bean.GameNewsDO" id="GameNewsResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="shortTitle"    column="short_title"    />
+        <result property="newsId"    column="news_id"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="typeName"    column="type_name"    />
+        <result property="pubTime"    column="pub_time"    />
+        <result property="content"    column="content"    />
+        <result property="description"    column="description"    />
+        <result property="litPic"    column="lit_pic"    />
+        <result property="source"    column="source"    />
+        <result property="sourceUrl"    column="source_url"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="GameNews_select_sql">
+        select id, title, short_title, news_id, type_id, type_name, pub_time, content, description, lit_pic, source, source_url, create_time, update_time from game_news
+    </sql>
+	
+    <select id="selectGameNewsList" parameterType="com.seven.collector.bean.GameNewsDO" resultMap="GameNewsResult">
+        <include refid="GameNews_select_sql"/>
+        <where>
+             delete_flag=0
+            <if test="id != null "> and id = #{id}</if>
+             <if test="title != null  and title != '' "> and title = #{title}</if>
+             <if test="shortTitle != null  and shortTitle != '' "> and short_title = #{shortTitle}</if>
+             <if test="newsId != null "> and news_id = #{newsId}</if>
+             <if test="typeId != null "> and type_id = #{typeId}</if>
+             <if test="typeName != null  and typeName != '' "> and type_name = #{typeName}</if>
+             <if test="pubTime != null "> and pub_time = #{pubTime}</if>
+             <if test="content != null  and content != '' "> and content = #{content}</if>
+             <if test="description != null  and description != '' "> and description = #{description}</if>
+             <if test="litPic != null  and litPic != '' "> and lit_pic = #{litPic}</if>
+             <if test="source != null  and source != '' "> and source = #{source}</if>
+             <if test="sourceUrl != null  and sourceUrl != '' "> and source_url = #{sourceUrl}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectGameNewsById" parameterType="Long" resultMap="GameNewsResult">
+        <include refid="GameNews_select_sql"/>
+        where id = #{id} and delete_flag=0
+    </select>
+    <select id="selectByNewsId" parameterType="Long" resultMap="GameNewsResult">
+        <include refid="GameNews_select_sql"/>
+        where news_id = #{newsId} and delete_flag=0
+    </select>
+
+    <insert id="insertGameNews" parameterType="com.seven.collector.bean.GameNewsDO" useGeneratedKeys="true" keyProperty="id">
+        insert into game_news
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="title != null  and title != ''  ">title,</if>
+			<if test="shortTitle != null  and shortTitle != ''  ">short_title,</if>
+			<if test="newsId != null  ">news_id,</if>
+			<if test="typeId != null  ">type_id,</if>
+			<if test="typeName != null  and typeName != ''  ">type_name,</if>
+			<if test="pubTime != null  ">pub_time,</if>
+			<if test="content != null  and content != ''  ">content,</if>
+			<if test="description != null  and description != ''  ">description,</if>
+			<if test="litPic != null  and litPic != ''  ">lit_pic,</if>
+			<if test="source != null  and source != ''  ">source,</if>
+			<if test="sourceUrl != null  and sourceUrl != ''  ">source_url,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="title != null  and title != ''  ">#{title},</if>
+			<if test="shortTitle != null  and shortTitle != ''  ">#{shortTitle},</if>
+			<if test="newsId != null  ">#{newsId},</if>
+			<if test="typeId != null  ">#{typeId},</if>
+			<if test="typeName != null  and typeName != ''  ">#{typeName},</if>
+			<if test="pubTime != null  ">#{pubTime},</if>
+			<if test="content != null  and content != ''  ">#{content},</if>
+			<if test="description != null  and description != ''  ">#{description},</if>
+			<if test="litPic != null  and litPic != ''  ">#{litPic},</if>
+			<if test="source != null  and source != ''  ">#{source},</if>
+			<if test="sourceUrl != null  and sourceUrl != ''  ">#{sourceUrl},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateGameNews" parameterType="com.seven.collector.bean.GameNewsDO">
+        update game_news
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null  and title != ''  ">title = #{title},</if>
+            <if test="shortTitle != null  and shortTitle != ''  ">short_title = #{shortTitle},</if>
+            <if test="newsId != null  ">news_id = #{newsId},</if>
+            <if test="typeId != null  ">type_id = #{typeId},</if>
+            <if test="typeName != null  and typeName != ''  ">type_name = #{typeName},</if>
+            <if test="pubTime != null  ">pub_time = #{pubTime},</if>
+            <if test="content != null  and content != ''  ">content = #{content},</if>
+            <if test="description != null  and description != ''  ">description = #{description},</if>
+            <if test="litPic != null  and litPic != ''  ">lit_pic = #{litPic},</if>
+            <if test="source != null  and source != ''  ">source = #{source},</if>
+            <if test="sourceUrl != null  and sourceUrl != ''  ">source_url = #{sourceUrl},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteGameNewsById" parameterType="Long">
+        delete from game_news where id = #{id}
+    </delete>
+	
+    <delete id="deleteGameNewsByIds" parameterType="String">
+        delete from game_news where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

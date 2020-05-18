@@ -1,10 +1,11 @@
 package com.seven.collector;
 
 import com.seven.collector.enums.GameTypeEnum;
-import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 
 import java.text.MessageFormat;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * @Description: TODO
@@ -14,7 +15,7 @@ import java.text.MessageFormat;
  **/
 public class CollectGameTask {
     private final static String seed = "https://m.18183.com/ku/list-0-{0}-0-0-0-{1}.html?q=";
-
+    public static Queue<String> queue = new LinkedList<String>();
     public static void main(String[] args) {
         for (GameTypeEnum typeEnum : GameTypeEnum.values()) {
             final GameTypeEnum type = typeEnum;
@@ -23,7 +24,7 @@ public class CollectGameTask {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Spider.create(new ListTask(type)).addUrl(url).thread(3).run();
+                        Spider.create(new ListTask(type)).addUrl(url).thread(5).run();
                         try {
                             Thread.sleep(1000L);
                         } catch (InterruptedException e) {

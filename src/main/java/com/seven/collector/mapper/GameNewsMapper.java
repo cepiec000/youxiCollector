@@ -1,6 +1,6 @@
 package com.seven.collector.mapper;
 
-import com.seven.collector.bean.GameInfoDO;
+import com.seven.collector.bean.GameNewsDO;
 
 import java.util.List;
 
@@ -8,43 +8,43 @@ import java.util.List;
  *  数据层
  * 
  * @author chendongdong
- * @date 2020-05-15
+ * @date 2020-05-18
  */
-public interface GameInfoMapper 
+public interface GameNewsMapper 
 {
 
-	public GameInfoDO selectByGameId(Long gameId);
+	public GameNewsDO selectByNewsId(Long newsId);
 	/**
      * 查询信息
      * 
      * @param id ID
      * @return 信息
      */
-	public GameInfoDO selectGameInfoById(Long id);
+	public GameNewsDO selectGameNewsById(Long id);
 	
 	/**
      * 查询列表
      * 
-     * @param gameInfo 信息
+     * @param gameNews 信息
      * @return 集合
      */
-	public List<GameInfoDO> selectGameInfoList(GameInfoDO gameInfo);
+	public List<GameNewsDO> selectGameNewsList(GameNewsDO gameNews);
 	
 	/**
      * 新增
      * 
-     * @param gameInfo 信息
+     * @param gameNews 信息
      * @return 结果
      */
-	public int insertGameInfo(GameInfoDO gameInfo);
+	public int insertGameNews(GameNewsDO gameNews);
 	
 	/**
      * 修改
      * 
-     * @param gameInfo 信息
+     * @param gameNews 信息
      * @return 结果
      */
-	public int updateGameInfo(GameInfoDO gameInfo);
+	public int updateGameNews(GameNewsDO gameNews);
 	
 	/**
      * 删除
@@ -52,7 +52,7 @@ public interface GameInfoMapper
      * @param id ID
      * @return 结果
      */
-	public int deleteGameInfoById(Long id);
+	public int deleteGameNewsById(Long id);
 	
 	/**
      * 批量删除
@@ -60,6 +60,6 @@ public interface GameInfoMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteGameInfoByIds(String[] ids);
+	public int deleteGameNewsByIds(String[] ids);
 	
 }

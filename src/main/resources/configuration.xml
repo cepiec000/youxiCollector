@@ -20,5 +20,6 @@
     <mappers>
         <mapper resource="mapper/GameInfoMapper.xml" />
         <mapper resource="mapper/GameImageMapper.xml" />
+        <mapper resource="mapper/GameNewsMapper.xml" />
     </mappers>
 </configuration>

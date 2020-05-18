@@ -11,10 +11,11 @@ import java.util.Date;
 public class GameImageDO {
     private Long id;
     private String url;
-    private Long gameId;
+    private Long targetId;
     private Integer deleteFlag;
     private Date createTime;
     private Date updateTime;
+    private Integer type;
 
     public Long getId() {
         return id;
@@ -32,12 +33,12 @@ public class GameImageDO {
         this.url = url;
     }
 
-    public Long getGameId() {
-        return gameId;
+    public Long getTargetId() {
+        return targetId;
     }
 
-    public void setGameId(Long gameId) {
-        this.gameId = gameId;
+    public void setTargetId(Long targetId) {
+        this.targetId = targetId;
     }
 
     public Integer getDeleteFlag() {
@@ -62,5 +63,13 @@ public class GameImageDO {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

@@ -36,5 +36,15 @@ public enum  GameTypeEnum {
     public String getNode() {
         return node;
     }
-
+    public static GameTypeEnum valueOf(Integer code) {
+        if (code == null) {
+            return null;
+        }
+        for (GameTypeEnum loginTypeEnum : values()) {
+            if (loginTypeEnum.getCode().equals(code)) {
+                return loginTypeEnum;
+            }
+        }
+        return null;
+    }
 }

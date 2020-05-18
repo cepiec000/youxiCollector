@@ -32,7 +32,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
     <select id="selectGameInfoList" parameterType="com.seven.collector.bean.GameInfoDO" resultMap="GameInfoResult">
         <include refid="GameInfo_select_sql"/>
-        <where>  
+        <where>
+             delete_flag=0
             <if test="id != null "> and id = #{id}</if>
              <if test="gameId != null "> and gameId = #{gameId}</if>
              <if test="title != null  and title != '' "> and title = #{title}</if>
@@ -57,9 +58,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectGameInfoById" parameterType="Long" resultMap="GameInfoResult">
         <include refid="GameInfo_select_sql"/>
-        where id = #{id}
+        where id = #{id} and delete_flag=0
     </select>
-        
+    <select id="selectByGameId" parameterType="Long" resultMap="GameInfoResult">
+        <include refid="GameInfo_select_sql"/>
+        where gameId = #{gameId} and delete_flag=0
+    </select>
+
     <insert id="insertGameInfo" parameterType="com.seven.collector.bean.GameInfoDO" useGeneratedKeys="true" keyProperty="id">
         insert into game_info
 		<trim prefix="(" suffix=")" suffixOverrides=",">

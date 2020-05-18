@@ -22,10 +22,14 @@ import java.util.List;
  **/
 public class ListTask implements PageProcessor {
     private Site site = Site.me().setRetryTimes(5).setSleepTime(1000).setTimeOut(10000);
-    private final static String LIST_PAGE_URL = "https://m.18183.com/ku/list.*";
-    private final static String INFO_PAGE_URL = "http://m.18183.com/ku/.*";
-    private final static String INFO_PAGE_URL2 = "https://m.18183.com/newgames/.*";
-    private final static String JSON_API_URL = "https://down-statistics.18183.com/down/.*";
+    private final static String LIST_PAGE_URL = "https://m.18183.com/ku/list.*" ;
+    private final static String INFO_PAGE_URL_HTTP = "http://m.18183.com/ku/.*" ;
+    private final static String INFO_PAGE_URL_HTTPS = "https://m.18183.com/ku/.*" ;
+    private final static String INFO_PAGE_URL2_HTTP = "https://m.18183.com/newgames/.*" ;
+    private final static String INFO_PAGE_URL3_HTTPS = "https://m.18183.com/down/.*" ;
+    private final static String INFO_PAGE_URL2 = "http://m.18183.com/newgames/.*" ;
+    private final static String INFO_PAGE_URL3 = "http://m.18183.com/down/.*" ;
+    private final static String JSON_API_URL = "https://down-statistics.18183.com/down/.*" ;
 
     private GameTypeEnum typeEnum;
 
@@ -39,26 +43,44 @@ public class ListTask implements PageProcessor {
         if (page.getUrl().get().matches(LIST_PAGE_URL)) {
             List<String> urls = page.getHtml().xpath("//*[@id=\"j_game_list\"]/li/figure/@data-url").all();
             page.addTargetRequests(urls);
-        } else if (page.getUrl().get().matches(INFO_PAGE_URL)) {
+        } else if (page.getUrl().get().matches(INFO_PAGE_URL_HTTP) || page.getUrl().get().matches(INFO_PAGE_URL_HTTPS)) {
             //游戏详情
             List<String> images = page.getHtml().xpath("//div[@class=\"swiper-slide\"]/img/@data-url").all();
             List<String> cPlist = page.getHtml().xpath("//div[@class=\"shrinkRevealBox\"]/p").all();
-            String jsonUrl = "https://down-statistics.18183.com/down/pack?game_id=" + ToolUtil.getGameKuId(page.getHtml().toString() + "v=1220");
+            //相关游戏下载
+            List<String> xgyouxiList = page.getHtml().xpath("//ul[@class=\"m-related-game f-def\"]/li/a").links().all();
+            List<String> xgyx = new ArrayList<String>();
+            if (xgyouxiList != null && xgyouxiList.size() > 0) {
+                for (String s : xgyouxiList) {
+                    xgyx.add(s.replace("www.18183.com", "m.18183.com"));
+                }
+            }
+
+            String jsonUrl = "https://down-statistics.18183.com/down/pack?game_id=" + ToolUtil.getGameKuId(page.getHtml().toString()) + "&v=1220" ;
             Request request = new Request(jsonUrl).putExtra("images", images).putExtra("cPlist", cPlist);
             page.addTargetRequest(request);
-            //相关游戏下载
-            List<String> xgyouxiList= page.getHtml().xpath("//ul[@class=\"m-related-game f-def\"]/li/a").links().all();
-            page.addTargetRequests(xgyouxiList);
-            //相关文章
-            //TODO
-        }else if (page.getUrl().get().matches(INFO_PAGE_URL2)){
+            page.addTargetRequests(xgyx);
+        } else if (page.getUrl().get().matches(INFO_PAGE_URL2)
+                || page.getUrl().get().matches(INFO_PAGE_URL3)
+                || page.getUrl().get().matches(INFO_PAGE_URL2_HTTP)
+                || page.getUrl().get().matches(INFO_PAGE_URL3_HTTPS)) {
             //相关游戏详情
             List<String> images = page.getHtml().xpath("//div[@class=\"swiper-slide\"]/img/@data-url").all();
+            if (images == null || images.size() == 0) {
+                images = page.getHtml().xpath("//div[@class=\"swiper-slide\"]/a/img/@data-url").all();
+            }
             List<String> cPlist = page.getHtml().xpath("//div[@class=\"shrinkRevealBox\"]/p").all();
-            String jsonUrl = "https://down-statistics.18183.com/down/pack?game_id=" + ToolUtil.getGameKuId(page.getHtml().toString() + "v=1220");
-            Request request = new Request(jsonUrl).putExtra("images", images).putExtra("cPlist", cPlist);
+            String gameId = ToolUtil.getGameKuId(page.getHtml().toString());
+            String jsonUrl = "https://down-statistics.18183.com/down/pack?game_id=" + gameId + "&v=" + gameId;
+            Request request = new Request(jsonUrl);
+            if (images != null && images.size() > 0) {
+                request.putExtra("images", images);
+            }
+            if (cPlist != null && cPlist.size() > 0) {
+                request.putExtra("cPlist", cPlist);
+            }
             page.addTargetRequest(request);
-        }else if (page.getUrl().get().matches(JSON_API_URL)) {
+        } else if (page.getUrl().get().matches(JSON_API_URL)) {
             GameInfo gameInfo = new GameInfo();
             List<String> images = (List<String>) page.getRequest().getExtra("images");
             List<String> cPlist = (List<String>) page.getRequest().getExtra("cPlist");
@@ -68,6 +90,15 @@ public class ListTask implements PageProcessor {
             JSONObject game_info = data.getJSONObject("game_info");
             JSONObject androidInfo = data.getJSONObject("android_down");
             JSONObject iosInfo = data.getJSONObject("ios_down");
+            try {
+                //如果IOS 跟 android下载地址都为空 就不储存
+                boolean isDow = (androidInfo == null && iosInfo == null);
+                if (isDow) {
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             gameInfo.setGameId(game_info.getLong("game_id"));
             gameInfo.setTitle(game_info.getString("title"));
             gameInfo.setIcon(game_info.getString("icon"));
@@ -90,4 +121,6 @@ public class ListTask implements PageProcessor {
     public Site getSite() {
         return site;
     }
+
+
 }
