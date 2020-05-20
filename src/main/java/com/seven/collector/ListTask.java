@@ -69,21 +69,19 @@ public class ListTask implements PageProcessor {
             if (images == null || images.size() == 0) {
                 images = page.getHtml().xpath("//div[@class=\"swiper-slide\"]/a/img/@data-url").all();
             }
-            List<String> cPlist = page.getHtml().xpath("//div[@class=\"shrinkRevealBox\"]/p").all();
+            String content = page.getHtml().xpath("//div[@class=\"shrinkRevealBox\"]").get();
             String gameId = ToolUtil.getGameKuId(page.getHtml().toString());
             String jsonUrl = "https://down-statistics.18183.com/down/pack?game_id=" + gameId + "&v=" + gameId;
             Request request = new Request(jsonUrl);
             if (images != null && images.size() > 0) {
                 request.putExtra("images", images);
             }
-            if (cPlist != null && cPlist.size() > 0) {
-                request.putExtra("cPlist", cPlist);
-            }
+                request.putExtra("content", content);
             page.addTargetRequest(request);
         } else if (page.getUrl().get().matches(JSON_API_URL)) {
             GameInfo gameInfo = new GameInfo();
             List<String> images = (List<String>) page.getRequest().getExtra("images");
-            List<String> cPlist = (List<String>) page.getRequest().getExtra("cPlist");
+            String content = (String) page.getRequest().getExtra("content");
             String body = page.getHtml().xpath("body").replace("<body>", "").replace("</body>", "").toString();
             JSONObject object = JSON.parseObject(body);
             JSONObject data = object.getJSONObject("data");
@@ -102,7 +100,7 @@ public class ListTask implements PageProcessor {
             gameInfo.setGameId(game_info.getLong("game_id"));
             gameInfo.setTitle(game_info.getString("title"));
             gameInfo.setIcon(game_info.getString("icon"));
-            gameInfo.setContent(ToolUtil.getContent(cPlist));
+            gameInfo.setContent(content);
             gameInfo.setImages(images);
             gameInfo.setDownNum(game_info.getInteger("down_num"));
             gameInfo.setViewNum(game_info.getInteger("view_num"));

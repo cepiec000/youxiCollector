@@ -13,6 +13,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,14 +47,19 @@ public class NewsTask implements PageProcessor {
             gameNews.setTypeId(object.getInteger("typeid"));
             gameNews.setTypeName(object.getString("type_name"));
             gameNews.setPubTime(ToolUtil.convertTimeToDate(Long.valueOf(object.getString("sortrank") + "000")));
+            int days=ToolUtil.differentDays(new Date(),gameNews.getPubTime());
+            if (days>30){
+                System.out.println("发布时间大于1个月，忽略添加");
+                return;
+            }
             List<String> images = new ArrayList<>();
             JSONArray jsonArray = object.getJSONArray("images");
             for (int i = 0; i < jsonArray.size(); i++) {
                 images.add(jsonArray.get(i).toString());
             }
             //内容
-            List<String> cList = page.getHtml().xpath("//div[@class=\"u-content-box\"]/p").all();
-            gameNews.setContent(ToolUtil.getContent(cList));
+            String content = page.getHtml().xpath("//div[@class=\"u-content-box\"]").get();
+            gameNews.setContent(content);
             gameNews.setImages(images);
             //入库
             MybatisDao.insertNewsDb(gameNews);
@@ -69,6 +75,13 @@ public class NewsTask implements PageProcessor {
                     request.putExtra("json", temp);
                     page.addTargetRequest(request);
                 }
+            }
+            String n=object.getJSONObject("page").getString("s");
+            Date nexDate=ToolUtil.convertTimeToDate(Long.valueOf(n+"000"));
+            int days=ToolUtil.differentDays(new Date(),nexDate);
+            if (days>30){
+                System.out.println("发布时间大于1个月，结束翻页");
+                return;
             }
             nextPageNews(page, object.getJSONObject("page").getString("s"));
         } else if (page.getUrl().get().matches(INDEX_PAGE_MATCHES)) {
