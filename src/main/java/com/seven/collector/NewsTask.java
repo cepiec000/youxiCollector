@@ -32,6 +32,8 @@ public class NewsTask implements PageProcessor {
     private static final String INDEX_PAGE_MATCHES = "https://m.18183.com/" ;
     private static final String NEWS_PAGE_MATCHES = "https://m.18183.com/news/yxxw/.*" ;
     private static final String JSON_PAGE_MATCHES = "https://api-mcms.18183.com/web/.*" ;
+    //大于多少天 就停止
+    private static final int DAYS=1;
 
     @Override
     public void process(Page page) {
@@ -48,8 +50,8 @@ public class NewsTask implements PageProcessor {
             gameNews.setTypeName(object.getString("type_name"));
             gameNews.setPubTime(ToolUtil.convertTimeToDate(Long.valueOf(object.getString("sortrank") + "000")));
             int days=ToolUtil.differentDays(new Date(),gameNews.getPubTime());
-            if (days>30){
-                System.out.println("发布时间大于1个月，忽略添加");
+            if (days>DAYS){
+                System.out.println("发布时间大于"+DAYS+"天，忽略添加");
                 return;
             }
             List<String> images = new ArrayList<>();
@@ -79,8 +81,8 @@ public class NewsTask implements PageProcessor {
             String n=object.getJSONObject("page").getString("s");
             Date nexDate=ToolUtil.convertTimeToDate(Long.valueOf(n+"000"));
             int days=ToolUtil.differentDays(new Date(),nexDate);
-            if (days>30){
-                System.out.println("发布时间大于1个月，结束翻页");
+            if (days>DAYS){
+                System.out.println("发布时间大于"+DAYS+"天，结束翻页");
                 return;
             }
             nextPageNews(page, object.getJSONObject("page").getString("s"));

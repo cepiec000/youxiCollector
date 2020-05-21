@@ -20,22 +20,18 @@ import java.util.List;
  * @Date 2020/5/15 15:12
  * @Version V1.0
  **/
-public class ListTask implements PageProcessor {
+public class ListTask2 implements PageProcessor {
     private Site site = Site.me().setRetryTimes(5).setSleepTime(1000).setTimeOut(10000);
-    private final static String LIST_PAGE_URL = "https://m.18183.com/ku/list.*" ;
-    private final static String INFO_PAGE_URL_HTTP = "http://m.18183.com/ku/.*" ;
-    private final static String INFO_PAGE_URL_HTTPS = "https://m.18183.com/ku/.*" ;
-    private final static String INFO_PAGE_URL2_HTTP = "https://m.18183.com/newgames/.*" ;
-    private final static String INFO_PAGE_URL3_HTTPS = "https://m.18183.com/down/.*" ;
-    private final static String INFO_PAGE_URL2 = "http://m.18183.com/newgames/.*" ;
-    private final static String INFO_PAGE_URL3 = "http://m.18183.com/down/.*" ;
-    private final static String JSON_API_URL = "https://down-statistics.18183.com/down/.*" ;
+    private final static String LIST_PAGE_URL = "https://m.18183.com/ku/list.*";
+    private final static String INFO_PAGE_URL_HTTP = "http://m.18183.com/ku/.*";
+    private final static String INFO_PAGE_URL_HTTPS = "https://m.18183.com/ku/.*";
+    private final static String INFO_PAGE_URL2_HTTP = "https://m.18183.com/newgames/.*";
+    private final static String INFO_PAGE_URL3_HTTPS = "https://m.18183.com/down/.*";
+    private final static String INFO_PAGE_URL2 = "http://m.18183.com/newgames/.*";
+    private final static String INFO_PAGE_URL3 = "http://m.18183.com/down/.*";
+    private final static String JSON_API_URL = "https://down-statistics.18183.com/down/.*";
 
     private GameTypeEnum typeEnum;
-
-    public ListTask(GameTypeEnum typeEnum) {
-        this.typeEnum = typeEnum;
-    }
 
     @Override
     public void process(Page page) {
@@ -55,8 +51,11 @@ public class ListTask implements PageProcessor {
                     xgyx.add(s.replace("www.18183.com", "m.18183.com"));
                 }
             }
-
-            String jsonUrl = "https://down-statistics.18183.com/down/pack?game_id=" + ToolUtil.getGameKuId(page.getHtml().toString()) + "&v=1220" ;
+            //游戏类型
+            if (!getGameType(page)){
+                return;
+            }
+            String jsonUrl = "https://down-statistics.18183.com/down/pack?game_id=" + ToolUtil.getGameKuId(page.getHtml().toString()) + "&v=1220";
             Request request = new Request(jsonUrl).putExtra("images", images).putExtra("content", content);
             page.addTargetRequest(request);
             page.addTargetRequests(xgyx);
@@ -76,7 +75,7 @@ public class ListTask implements PageProcessor {
             if (images != null && images.size() > 0) {
                 request.putExtra("images", images);
             }
-                request.putExtra("content", content);
+            request.putExtra("content", content);
             page.addTargetRequest(request);
         } else if (page.getUrl().get().matches(JSON_API_URL)) {
             GameInfo gameInfo = new GameInfo();
@@ -121,4 +120,21 @@ public class ListTask implements PageProcessor {
     }
 
 
+    private boolean getGameType(Page page){
+        List<String> all = page.getHtml().xpath("//div[@class=\"list-game-info\"]/span").all();
+        String type = "";
+        for (int i = 0; i < all.size(); i++) {
+            if (i == 1) {
+                type = all.get(i).replace("<span>", "").replace("</span>", "");
+            }
+        }
+        if (type != null && type!="") {
+            typeEnum = GameTypeEnum.noteOf(type);
+        }
+        if (typeEnum==null){
+            return false;
+        }
+//        System.out.println(typeEnum.getCode()+"--"+typeEnum.getNode()+"!!!");
+        return true;
+    }
 }

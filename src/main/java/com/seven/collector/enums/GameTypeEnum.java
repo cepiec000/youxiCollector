@@ -47,4 +47,16 @@ public enum  GameTypeEnum {
         }
         return null;
     }
+
+    public static GameTypeEnum noteOf(String note) {
+        if (note == null) {
+            return null;
+        }
+        for (GameTypeEnum loginTypeEnum : values()) {
+            if (loginTypeEnum.getNode().equals(note)) {
+                return loginTypeEnum;
+            }
+        }
+        return null;
+    }
 }
