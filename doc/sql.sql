@@ -31,3 +31,23 @@ CREATE TABLE `game_info` (
   `delete_flag` int(2) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+CREATE TABLE `game_news` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `short_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `news_id` bigint(20) DEFAULT NULL,
+  `type_id` int(11) DEFAULT NULL,
+  `type_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `pub_time` datetime NOT NULL,
+  `content` text COLLATE utf8_unicode_ci,
+  `description` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `lit_pic` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `source` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `source_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `delete_flag` int(2) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
