@@ -16,7 +16,7 @@ public class CollectGameTask {
     private final static String newGame="https://m.18183.com/ku/list-0-{0}-0-2-1-{1}.html";
     private final static String typeGame="https://m.18183.com/ku/list-0-0-{0}-2-0-{1}.html";
     public static void main(String[] args) {
-//        getGame();
+        getGame();
         typeGame();
 
     }
