@@ -30,9 +30,14 @@ public class MybatisDao {
         SqlSession sqlSession = SqlSessionTools.openSqlSession(false);
         try {
             GameInfoMapper infoMapper = sqlSession.getMapper(GameInfoMapper.class);
-           Object object= infoMapper.selectByGameId(infoDO.getGameId());
-           if (object!=null){
-               System.out.println(gameInfo.getTitle()+":游戏已经存在，忽略添加");
+            GameInfoDO oldGame= infoMapper.selectByGameId(infoDO.getGameId());
+           if (oldGame!=null){
+               oldGame.setAndroidDownUrl(infoDO.getAndroidDownUrl());
+               oldGame.setAndroidFileSize(infoDO.getAndroidFileSize());
+               oldGame.setIosDownUrl(infoDO.getIosDownUrl());
+               oldGame.setIosFileSize(infoDO.getIosFileSize());
+               infoMapper.updateGameInfo(oldGame);
+               System.out.println(gameInfo.getTitle()+":游戏已经存在，更新下载地址成功");
                return;
            }
             int i = infoMapper.insertGameInfo(infoDO);

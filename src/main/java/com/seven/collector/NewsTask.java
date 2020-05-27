@@ -33,7 +33,7 @@ public class NewsTask implements PageProcessor {
     private static final String NEWS_PAGE_MATCHES = "https://m.18183.com/news/yxxw/.*" ;
     private static final String JSON_PAGE_MATCHES = "https://api-mcms.18183.com/web/.*" ;
     //大于多少天 就停止
-    private static final int DAYS=1;
+    private static final int DAYS=2;
 
     @Override
     public void process(Page page) {
